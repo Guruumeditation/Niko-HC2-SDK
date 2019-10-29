@@ -1,0 +1,30 @@
+[
+  {
+    "Devices": [
+      {
+        "PropertyDefinitions": [
+          {
+            "BasicState": {
+              "Description": "Choice(On,Off,Triggered)",
+              "HasStatus": "true",
+              "CanControl": "true"
+            }
+          }
+        ],
+        "Uuid": "76924964-ae78-49ed-a011-f2939d0c6ff4"
+      },
+      {
+        "PropertyDefinitions": [
+          {
+            "Status": {
+              "Description": "Choice(On,Off)",
+              "HasStatus": "true",
+              "CanControl": "true"
+            }
+          }
+        ],
+        "Uuid": "ab2e315e-a6df-4cc8-9518-5fa2a48226f5"
+      }
+    ]
+  }
+]

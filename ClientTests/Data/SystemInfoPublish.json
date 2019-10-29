@@ -1,0 +1,23 @@
+[
+  {
+    "SystemInfo": [
+      {
+        "LastConfig": "20190206093827",
+        "WaterTariff": "0",
+        "Currency": "EUR",
+        "Units": "0",
+        "Language": "EN",
+        "SWversions": [
+          {
+            "NhcVersion": "2.5.1.0"
+          },
+          {
+            "CocoImage": "2019.1-20190118105507"
+          }
+        ],
+        "ElectricityTariff": "0",
+        "GasTariff": "0"
+      }
+    ]
+  }
+]

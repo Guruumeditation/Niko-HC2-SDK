@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>HC2.Arcanastudio.Net</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Olivier Matis</Authors>
+    <Company>Arcana Studio.NET</Company>
+    <Product>Niko Home Controller 2 SDK</Product>
+    <Copyright>Copyright 2020  Arcana Studio</Copyright>
+    <Version>0.5.0</Version>
+    <PackageId>Net.ArcanaStudio.NikoHC2SDK</PackageId>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>3</WarningLevel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Interfaces\**" />
+    <EmbeddedResource Remove="Interfaces\**" />
+    <None Remove="Interfaces\**" />
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ca-chain.cert.pem" />
+    <None Remove="Release notes version 2.5.1 Windows.pdf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MQTTnet.NETStandard" Version="3.0.8" />
+    <PackageReference Include="Serilog" Version="2.9.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+    <PackageReference Include="System.Text.Json" Version="4.7.0" />
+    <PackageReference Include="Zeroconf" Version="3.3.2" />
+  </ItemGroup>
+
+</Project>
