@@ -1,0 +1,39 @@
+parameters:
+  Publish: 'false'
+
+steps:
+
+  - script: dotnet tool install --global dotnet-sonarscanner
+    displayName: 'Install SonarCloud'
+
+  - script: dotnet sonarscanner begin /k:"Guruumeditation_NikoSDK" /o:"guruumeditation-github" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=$(SonarCloud-NikoSDK)
+    displayName: 'Prepare analysis on SonarCloud'
+
+  - script: dotnet build --configuration $(buildConfiguration) -p:Version=${{ parameters.Version }}
+    displayName: 'dotnet build $(buildConfiguration)'
+
+  - script: dotnet test -s UnitTests.runsettings --logger trx --collect "Code coverage
+    displayName: 'Running unit tests and coverage'
+
+  - script: dotnet sonarscanner end /d:sonar.login=$(SonarCloud-NikoSDK)
+    displayName: 'Run Code Analysis'
+
+  # Pack NuGet packages.
+  - task: DotNetCoreCLI@2
+    displayName: 'Nuget Pack'
+    inputs:
+      command: 'pack'
+      configuration: 'release'
+      versioningScheme: byEnvVar
+      versionEnvVar:   ${{ parameters.NugetVersion }}
+      packagesToPack: '**/*.csproj' 
+      verbosityPack: Normal
+      packDirectory: '$(Build.ArtifactStagingDirectory)/packages'
+  
+  - ${{ if eq(parameters.Publish, 'true')}}:
+    - task: DotNetCoreCLI@2
+      displayName: dotnet nuget push
+      inputs:
+        command: custom
+        custom: nuget
+        arguments: push $(Build.ArtifactStagingDirectory)\packages\*.nupkg  --source https://api.nuget.org/v3/index.json --api-key $(Nuget-NikoSDK) --no-symbols true
