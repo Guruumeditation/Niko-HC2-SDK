@@ -6,7 +6,7 @@ steps:
   - script: dotnet tool install --global dotnet-sonarscanner
     displayName: 'Install SonarCloud'
 
-  - script: dotnet sonarscanner begin /k:"Guruumeditation_Niko-HC2-SDK" /o:"guruumeditation-github" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=$(SonarCloud-NikoSDK)
+  - script: dotnet sonarscanner begin /k:"Guruumeditation_Niko-HC2-SDK" /o:"guruumeditation-github" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=$(SonarCloud-NikoHC2SDK)
     displayName: 'Prepare analysis on SonarCloud'
 
   - script: dotnet build --configuration $(buildConfiguration) -p:Version=${{ parameters.Version }}
