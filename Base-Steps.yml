@@ -6,7 +6,13 @@ steps:
   - script: dotnet tool install --global dotnet-sonarscanner
     displayName: 'Install SonarCloud'
 
-  - script: dotnet sonarscanner begin /k:"Guruumeditation_Niko-HC2-SDK" /o:"guruumeditation-github" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=$(SonarCloud-NikoHC2SDK)
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'SonarCloud-NikoHC2SDK'
+    organization: 'guruumeditation-github'
+    scannerMode: 'MSBuild'
+    projectKey: 'Guruumeditation_Niko-HC2-SDK'
+    projectName: 'Niko-HC2-SDK'
     displayName: 'Prepare analysis on SonarCloud'
 
   - script: dotnet build --configuration $(buildConfiguration) -p:Version=${{ parameters.Version }}
@@ -15,7 +21,7 @@ steps:
   - script: dotnet test -s UnitTests.runsettings --logger trx --collect "Code coverage
     displayName: 'Running unit tests and coverage'
 
-  - script: dotnet sonarscanner end /d:sonar.login=$(SonarcloudNikoHC2SDK)
+- task: SonarCloudAnalyze@1
     displayName: 'Run Code Analysis'
 
   # Pack NuGet packages.
