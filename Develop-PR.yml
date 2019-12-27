@@ -7,7 +7,7 @@ pr:
 - develop
 
 pool:
-  name: windows-latest
+  name: 'windows-latest'
 
 steps:
 - template: Base-Steps.yml
