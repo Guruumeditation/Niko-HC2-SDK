@@ -15,7 +15,7 @@ steps:
   - script: dotnet test -s UnitTests.runsettings --logger trx --collect "Code coverage
     displayName: 'Running unit tests and coverage'
 
-  - script: dotnet sonarscanner end /d:sonar.login=$(SonarCloud-NikoSDK)
+  - script: dotnet sonarscanner end /d:sonar.login=$(SonarcloudNikoHC2SDK)
     displayName: 'Run Code Analysis'
 
   # Pack NuGet packages.
