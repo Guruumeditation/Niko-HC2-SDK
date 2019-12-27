@@ -16,7 +16,7 @@ steps:
     inputs:
      command: 'build'
      projects: '**/*.csproj'
-     arguments: '--configuration $(buildConfiguration) -p:Version=${{ parameters.Version }}'
+     arguments: '--configuration $(buildConfiguration) -p:Version=$'{{ parameters.Version }}
 
   - script: dotnet test -s UnitTests.runsettings --logger trx --collect "Code coverage
     displayName: 'Running unit tests and coverage'
