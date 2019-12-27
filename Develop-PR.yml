@@ -7,7 +7,7 @@ pr:
 - develop
 
 pool:
-  name: Hosted VS2017
+  name: $(VMPool)
 
 steps:
 - template: Base-Steps.yml
