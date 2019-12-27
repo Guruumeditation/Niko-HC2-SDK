@@ -3,9 +3,6 @@ parameters:
 
 steps:
 
-  - script: dotnet tool install --global dotnet-sonarscanner
-    displayName: 'Install SonarCloud'
-
   - task: SonarCloudPrepare@1
     displayName: 'Prepare analysis on SonarCloud'
     inputs:
@@ -24,6 +21,11 @@ steps:
 
   - task: SonarCloudAnalyze@1
     displayName: 'Run Code Analysis'
+    
+  - task: SonarCloudPublish@1
+    displayName: 'Publish Code Analysis'
+    inputs:
+     pollingTimeoutSec: '300'
 
   # Pack NuGet packages.
   - task: DotNetCoreCLI@2
