@@ -7,7 +7,7 @@ pr:
 - develop
 
 pool:
-  name: $(VMPool)
+  name: windows-latest
 
 steps:
 - template: Base-Steps.yml
