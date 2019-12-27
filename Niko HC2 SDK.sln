@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Niko HC2 SDK", "Niko HC2 SD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{22BD3B25-DA68-416B-B353-9E32885CEDD4}"
 	ProjectSection(SolutionItems) = preProject
+		Base-Steps.yml = Base-Steps.yml
+		Develop-PR.yml = Develop-PR.yml
 		README.md = README.md
 		smart-house.png = smart-house.png
 	EndProjectSection
