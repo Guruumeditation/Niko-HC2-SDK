@@ -18,8 +18,11 @@ steps:
      projects: '**/*.csproj'
      arguments: '--configuration $(buildConfiguration)'
 
-  - script: dotnet test -s UnitTests.runsettings --logger trx --collect "Code coverage
-    displayName: 'Running unit tests and coverage'
+ - task: DotNetCoreCLI@2
+   inputs:
+     command: 'test'
+     projects: '**/*Tests.csproj'
+     testRunTitle: 'HC2 SDK Test'
 
   - task: SonarCloudAnalyze@1
     displayName: 'Run Code Analysis'
