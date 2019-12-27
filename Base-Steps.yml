@@ -23,7 +23,7 @@ steps:
     displayName: 'Running unit tests and coverage'
 
   - task: SonarCloudAnalyze@1
-     displayName: 'Run Code Analysis'
+    displayName: 'Run Code Analysis'
 
   # Pack NuGet packages.
   - task: DotNetCoreCLI@2
