@@ -16,7 +16,7 @@ steps:
   - task: DotNetCoreCLI@2
     inputs:
      command: 'build'
-     projects: '**/*.sln'
+     projects: '**/*Tests.csproj'
      arguments: '--configuration $(buildConfiguration)'
 
   - task: DotNetCoreCLI@2
@@ -24,6 +24,7 @@ steps:
      command: 'test'
      projects: '**/*Tests.csproj'
      testRunTitle: 'HC2 SDK Test'
+     arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
 
   - task: SonarCloudAnalyze@1
     displayName: 'Run Code Analysis'
