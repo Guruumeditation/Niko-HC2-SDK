@@ -12,17 +12,12 @@ steps:
       projectKey: 'Guruumeditation_Niko-HC2-SDK'
       projectName: 'Niko-HC2-SDK'
      
-  - task: DotNetCoreCLI@2
-    inputs:
-     command: 'build'
-     projects: '**/*.csproj'
-     arguments: '--configuration $(buildConfiguration)'
 
-  - task: DotNetCoreCLI@2
-    inputs:
-     command: 'test'
-     projects: '**/*Tests.csproj'
-     testRunTitle: 'HC2 SDK Test'
+  - script: dotnet build --configuration $(buildConfiguration) -p:Version=${{ parameters.Version }}
+    displayName: 'dotnet build $(buildConfiguration)'
+
+  - script: dotnet test -s UnitTests.runsettings --logger trx --collect "Code coverage
+    displayName: 'Running unit tests and coverage'
 
   - task: SonarCloudAnalyze@1
     displayName: 'Run Code Analysis'

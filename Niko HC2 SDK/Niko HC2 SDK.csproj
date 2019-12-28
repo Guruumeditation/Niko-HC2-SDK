@@ -17,6 +17,7 @@
     <PackageProjectUrl>https://github.com/Guruumeditation/Niko-HC2-SDK</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Guruumeditation/Niko-HC2-SDK</RepositoryUrl>
     <PackageTags>Niko, Home Control 2, HC 2</PackageTags>
+    <ProjectGuid>{79a0d8df-022a-4159-b557-2013f671caef}</ProjectGuid>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
