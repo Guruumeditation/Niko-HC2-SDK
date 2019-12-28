@@ -49,34 +49,16 @@ namespace HC2.Arcanastudio.Net.Parsers
         {
             var dict = new Dictionary<string, IPropertyDefinition>();
 
-            foreach (var propertydefinition in propertydefinitions.EnumerateArray())
+            var parser = new PropertyDefinitionParser();
+
+            var list = parser.Parse(propertydefinitions).Cast<IPropertyDefinition>().ToList();
+
+            foreach (var pd in list)
             {
-                var pd = new PropertyDefinition();
-                var rawproperty = propertydefinition.EnumerateObject().First();
-                pd.Name = rawproperty.Name;
-
-                pd.HasStatus = bool.Parse(rawproperty.Value.GetProperty("HasStatus").GetString());
-                pd.CanControl = bool.Parse(rawproperty.Value.GetProperty("CanControl").GetString());
-                pd.Description = rawproperty.Value.GetProperty("Description").GetString();
-
-                if (pd.Description.StartsWith("Range"))
-                {
-                    pd.ValueType = PropertyType.Range;
-                    pd.Range = Range.FromString(pd.Description);
-                }
-                else
-                    if (pd.Description.StartsWith("Choice"))
-                    {
-                        pd.ValueType = PropertyType.Choice;
-                        var s = pd.Description.Split('(', ')');
-
-                        pd.Choices = s[1].Split(',').ToList();
-                    }
-                    else
-                        pd.ValueType = PropertyType.Bool;
 
                 dict.Add(pd.Name, pd);
             }
+
             return dict;
         }
 

@@ -36,38 +36,11 @@ namespace HC2.Arcanastudio.Net.Parsers
 
         private List<IPropertyDefinition> ParsePropertyDefinitions(JsonElement propertydefinitions)
         {
-            var list = new List<IPropertyDefinition>();
+            var parser = new PropertyDefinitionParser();
 
-            foreach (var propertydefinition in propertydefinitions.EnumerateArray())
-            {
-                var pd = new PropertyDefinition();
-                var rawproperty = propertydefinition.EnumerateObject().First();
-                pd.Name = rawproperty.Name;
+            var list = parser.Parse(propertydefinitions);
 
-                pd.HasStatus = bool.Parse(rawproperty.Value.GetProperty("HasStatus").GetString());
-                pd.CanControl = bool.Parse(rawproperty.Value.GetProperty("CanControl").GetString());
-                pd.Description = rawproperty.Value.GetProperty("Description").GetString();
-
-                if (pd.Description.StartsWith("Range"))
-                {
-                    pd.ValueType = PropertyType.Range;
-                    pd.Range = Range.FromString(pd.Description);
-                }
-                else
-                    if (pd.Description.StartsWith("Choice"))
-                    {
-                        pd.ValueType = PropertyType.Choice;
-                        var s = pd.Description.Split('(', ')');
-
-                        pd.Choices = s[1].Split(',').ToList();
-                    }
-                    else
-                        pd.ValueType = PropertyType.Bool;
-
-                list.Add(pd);
-            }
-
-            return list;
+            return list.Cast<IPropertyDefinition>().ToList();
         }
 
         #endregion
