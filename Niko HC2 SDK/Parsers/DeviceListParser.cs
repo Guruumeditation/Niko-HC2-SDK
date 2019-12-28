@@ -25,7 +25,7 @@ namespace HC2.Arcanastudio.Net.Parsers
 
         private Device ParseDevice(JsonElement element)
         {
-            var device  = JsonSerializer.Deserialize<Device>(element.GetRawText());
+            var device = JsonSerializer.Deserialize<Device>(element.GetRawText());
 
             var propertydefinitions = ParsePropertyDefinitions(element.GetProperty("PropertyDefinitions"));
 
@@ -45,52 +45,37 @@ namespace HC2.Arcanastudio.Net.Parsers
             return device;
         }
 
-        private Dictionary<string,IPropertyDefinition> ParsePropertyDefinitions(JsonElement propertydefinitions)
+        private Dictionary<string, IPropertyDefinition> ParsePropertyDefinitions(JsonElement propertydefinitions)
         {
-            var dict = new Dictionary<string,IPropertyDefinition>();
+            var dict = new Dictionary<string, IPropertyDefinition>();
 
             foreach (var propertydefinition in propertydefinitions.EnumerateArray())
             {
                 var pd = new PropertyDefinition();
-                var tt = propertydefinition.EnumerateObject().ToList();
-                pd.Name = tt[0].Name;
+                var rawproperty = propertydefinition.EnumerateObject().First();
+                pd.Name = rawproperty.Name;
 
-                foreach (var pro in tt[0].Value.EnumerateObject())
+                pd.HasStatus = bool.Parse(rawproperty.Value.GetProperty("HasStatus").GetString());
+                pd.CanControl = bool.Parse(rawproperty.Value.GetProperty("CanControl").GetString());
+                pd.Description = rawproperty.Value.GetProperty("Description").GetString();
+
+                if (pd.Description.StartsWith("Range"))
                 {
-                    switch (pro.Name)
-                    {
-                        case "HasStatus":
-                            pd.HasStatus = bool.Parse(pro.Value.ToString());
-                            break;
-                        case "CanControl":
-                            pd.CanControl = bool.Parse(pro.Value.ToString());
-                            break;
-                        case "Description":
-                            pd.Description = pro.Value.ToString();
-                            if (pd.Description.StartsWith("Range"))
-                            {
-                                pd.ValueType = PropertyType.Range;
-                                pd.Range = Range.FromString(pd.Description);
-                            }
-
-                            if (pd.Description.StartsWith("Choice"))
-                            {
-                                pd.ValueType = PropertyType.Choice;
-                                var s = pd.Description.Split('(', ')');
-
-                                pd.Choices = s[1].Split(',').ToList();
-                            }
-
-                            if (pd.Description.StartsWith("Boolean"))
-                            {
-                                pd.ValueType = PropertyType.Bool;
-                            }
-
-
-                            break;
-                    }
+                    pd.ValueType = PropertyType.Range;
+                    pd.Range = Range.FromString(pd.Description);
                 }
-                dict.Add(pd.Name,pd);
+                else
+                    if (pd.Description.StartsWith("Choice"))
+                    {
+                        pd.ValueType = PropertyType.Choice;
+                        var s = pd.Description.Split('(', ')');
+
+                        pd.Choices = s[1].Split(',').ToList();
+                    }
+                    else
+                        pd.ValueType = PropertyType.Bool;
+
+                dict.Add(pd.Name, pd);
             }
             return dict;
         }
@@ -103,7 +88,7 @@ namespace HC2.Arcanastudio.Net.Parsers
             {
                 var values = property.EnumerateObject().ToList();
 
-                var p = new Property {Name = values[0].Name, Value = values[0].Value.GetString()};
+                var p = new Property { Name = values[0].Name, Value = values[0].Value.GetString() };
 
                 list.Add(p);
             }

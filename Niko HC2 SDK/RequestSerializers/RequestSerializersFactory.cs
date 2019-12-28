@@ -2,7 +2,7 @@
 
 namespace HC2.Arcanastudio.Net.RequestSerializers
 {
-    internal class RequestSerializersFactory
+    internal static class RequestSerializersFactory
     {
         private static readonly Dictionary<string, IRequestSerializer> _parsers = new Dictionary<string, IRequestSerializer>();
 

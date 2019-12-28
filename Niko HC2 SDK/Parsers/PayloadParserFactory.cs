@@ -2,7 +2,7 @@
 
 namespace HC2.Arcanastudio.Net.Parsers
 {
-    internal class PayloadParserFactory
+    internal static class PayloadParserFactory
     {
         private static readonly Dictionary<string,IPayloadParser> _parsers = new Dictionary<string, IPayloadParser>();
 

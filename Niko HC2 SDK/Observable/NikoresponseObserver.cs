@@ -1,5 +1,4 @@
 ﻿using System;
-using HC2.Arcanastudio.Net.Client;
 using HC2.Arcanastudio.Net.Client.Messages;
 
 namespace HC2.Arcanastudio.Net.Observable

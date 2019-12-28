@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Security;
 using System.Security.Authentication;
@@ -28,7 +29,7 @@ namespace HC2.Arcanastudio.Net.Client
         NikoResponseObservable ResponseObservable { get; }
         bool IsConnected { get; }
     }
-
+    [ExcludeFromCodeCoverage]
     internal class MqttClient : INativeMqttClient
     {
         private IMqttClient _mqttClient;
