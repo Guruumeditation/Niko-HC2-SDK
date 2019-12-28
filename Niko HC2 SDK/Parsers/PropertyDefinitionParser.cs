@@ -30,15 +30,15 @@ namespace HC2.Arcanastudio.Net.Parsers
                     pd.Range = Range.FromString(pd.Description);
                 }
                 else
-                if (pd.Description.StartsWith("Choice"))
-                {
-                    pd.ValueType = PropertyType.Choice;
-                    var s = pd.Description.Split('(', ')');
+                    if (pd.Description.StartsWith("Choice"))
+                    {
+                        pd.ValueType = PropertyType.Choice;
+                        var s = pd.Description.Split('(', ')');
 
-                    pd.Choices = s[1].Split(',').ToList();
-                }
-                else
-                    pd.ValueType = PropertyType.Bool;
+                        pd.Choices = s[1].Split(',').ToList();
+                    }
+                    else
+                        pd.ValueType = PropertyType.Bool;
 
                 list.Add(pd);
             }
