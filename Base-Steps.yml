@@ -54,4 +54,4 @@ steps:
       inputs:
         command: custom
         custom: nuget
-        arguments: push $(Build.ArtifactStagingDirectory)\packages\*.nupkg  --source https://api.nuget.org/v3/index.json --api-key $(Nuget-NikoSDK) --no-symbols true
+        arguments: push $(Build.ArtifactStagingDirectory)\packages\*.nupkg  --source https://api.nuget.org/v3/index.json --api-key $(Nuget-NikoHC2SDK-Key) --no-symbols true
