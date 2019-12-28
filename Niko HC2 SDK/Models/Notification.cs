@@ -22,27 +22,27 @@ namespace HC2.Arcanastudio.Net.Models
 
         public string Type
         {
-            set => NotificationType = (NotificationTypeEnum) Enum.Parse(typeof(NotificationTypeEnum), value, true);
+            set => NotificationType = (NotificationType) Enum.Parse(typeof(NotificationType), value, true);
         }
 
         public string Status
         {
-            set => NotificationStatus = (StatusEnum)Enum.Parse(typeof(StatusEnum), value, true);
+            set => NotificationStatus = (Status)Enum.Parse(typeof(Status), value, true);
         }
 
-        public NotificationTypeEnum NotificationType { get; set; }
-        public StatusEnum NotificationStatus { get; set; }
+        public NotificationType NotificationType { get; set; }
+        public Status NotificationStatus { get; set; }
 
         public string Text { get; set; }
     }
 
-    public enum NotificationTypeEnum
+    public enum NotificationType
     {
         Alarm,
         Notification
     }
 
-    public enum StatusEnum
+    public enum Status
     {
         New,
         Read

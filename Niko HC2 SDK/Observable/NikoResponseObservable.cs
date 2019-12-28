@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using HC2.Arcanastudio.Net.Client;
 using HC2.Arcanastudio.Net.Client.Messages;
 
 namespace HC2.Arcanastudio.Net.Observable
@@ -52,6 +51,12 @@ namespace HC2.Arcanastudio.Net.Observable
             }
 
             public void Dispose()
+            {
+                Dispose(true);
+                GC.SuppressFinalize(this);
+            }
+
+            private void Dispose(bool disposing)
             {
                 if (_observer != null && _observers.Contains(_observer))
                     _observers.Remove(_observer);

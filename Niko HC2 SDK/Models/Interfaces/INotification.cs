@@ -6,8 +6,8 @@ namespace HC2.Arcanastudio.Net.Models.Interfaces
     {
         string Id { get; set; }
         DateTime Time { get; }
-        NotificationTypeEnum NotificationType { get; set; }
-        StatusEnum NotificationStatus { get; set; }
+        NotificationType NotificationType { get; set; }
+        Status NotificationStatus { get; set; }
         string Text { get; set; }
     }
 }

@@ -301,7 +301,7 @@ namespace ClientTests
             message.Data.Count.Should().Be(1);
             var notifications = message.Data.Cast<Notification>().ToList();
             notifications[0].Id.Should().Be("a5f576c6-7f4a-4541-bc39-28f617cff435");
-            notifications[0].NotificationStatus.Should().Be(StatusEnum.New);
+            notifications[0].NotificationStatus.Should().Be(Status.New);
         }
 
 
@@ -359,7 +359,7 @@ namespace ClientTests
             message.Data.Count.Should().Be(1);
             var notifications = message.Data.Cast<Notification>().ToList();
             notifications[0].Id.Should().Be("a5f576c6-7f4a-4541-bc39-28f617cff435");
-            notifications[0].NotificationStatus.Should().Be(StatusEnum.Read);
+            notifications[0].NotificationStatus.Should().Be(Status.Read);
         }
 
 
@@ -417,7 +417,7 @@ namespace ClientTests
             message.Data.Count.Should().Be(1);
             var notifications = message.Data.Cast<Notification>().ToList();
             notifications[0].Id.Should().Be("a5f576c6-7f4a-4541-bc39-28f617cff435");
-            notifications[0].NotificationStatus.Should().Be(StatusEnum.New);
+            notifications[0].NotificationStatus.Should().Be(Status.New);
         }
 
 

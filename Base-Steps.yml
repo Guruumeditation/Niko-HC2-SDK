@@ -42,7 +42,7 @@ steps:
       configuration: 'release'
       versioningScheme: byEnvVar
       versionEnvVar:   ${{ parameters.NugetVersion }}
-      packagesToPack: '**/*.csproj' 
+      packagesToPack: '**/Niko HC2 SDK.csproj' 
       verbosityPack: Normal
       packDirectory: '$(Build.ArtifactStagingDirectory)/packages'
   

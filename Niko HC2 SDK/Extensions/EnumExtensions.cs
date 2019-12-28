@@ -1,7 +1,5 @@
-﻿using System.ComponentModel;
-using HC2.Arcanastudio.Net.Log;
+﻿using HC2.Arcanastudio.Net.Log;
 using MQTTnet.Client.Subscribing;
-using Serilog.Events;
 
 namespace HC2.Arcanastudio.Net.Extensions
 {

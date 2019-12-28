@@ -103,7 +103,7 @@ namespace HC2.Arcanastudio.Net.Client
                             response = new NikoMessage { MessageType = NikoMessageType.Rsp,  Method = doc.RootElement.GetProperty("Method").GetString(), Params = rspparams, CorrelationData = Guid.Empty};
                             break;
                         case "err":
-                            response =new NikoMessage {MessageType = NikoMessageType.Err, Method = doc.RootElement.GetProperty("Method").GetString(), Params = doc }; //JsonSerializer.Deserialize<NikoErrorMessage>(payload);
+                            response =new NikoMessage {MessageType = NikoMessageType.Err, Method = doc.RootElement.GetProperty("Method").GetString(), Params = doc };
                             break;
                     }
 
