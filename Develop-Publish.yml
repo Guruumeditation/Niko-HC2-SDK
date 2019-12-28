@@ -1,10 +1,15 @@
-# Pipeline for Develop PR
+# Pipeline for Develop CI
 
 name: $(Date:yyyyMMdd)$(Rev:r)
 
-trigger: none
-pr:
-- develop
+trigger:
+  branches:
+    include:
+    - develop
+  paths:
+    exclude:
+    - README.md
+pr: none
 
 pool:
   vmImage: $(VMImage)
@@ -14,3 +19,4 @@ steps:
   parameters:
     Version: $(Version-Develop)
     NugetVersion : NugetVersion-Develop
+    Publish: 'true'

@@ -1,10 +1,10 @@
-# Pipeline for Develop PR
+# Pipeline for Master PR
 
 name: $(Date:yyyyMMdd)$(Rev:r)
 
 trigger: none
 pr:
-- develop
+- master
 
 pool:
   vmImage: $(VMImage)
@@ -12,5 +12,5 @@ pool:
 steps:
 - template: Base-Steps.yml
   parameters:
-    Version: $(Version-Develop)
-    NugetVersion : NugetVersion-Develop
+    Version: $(Version-Master)
+    NugetVersion : NugetVersion-Master

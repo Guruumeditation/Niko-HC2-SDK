@@ -1,0 +1,22 @@
+# Pipeline for Master CI
+
+name: $(Date:yyyyMMdd)$(Rev:r)
+
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    exclude:
+    - README.md
+pr: none
+
+pool:
+  vmImage: $(VMImage)
+
+steps:
+- template: Base-Steps.yml
+  parameters:
+    Version: $(Version-Master)
+    NugetVersion : NugetVersion-Master
+    Publish: 'true'
