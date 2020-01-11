@@ -2,9 +2,9 @@
 
 namespace HC2.Arcanastudio.Net.Models.Interfaces
 {
-    public interface IDeviceProperties
+    public interface IDevicePropertiesStatus
     {
         string Id { get; }
-        List<KeyValuePair<string, string>> Properties { get; }
+        List<IPropertyStatus> Properties { get; }
     }
 }

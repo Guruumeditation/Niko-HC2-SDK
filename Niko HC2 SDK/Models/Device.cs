@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
 using HC2.Arcanastudio.Net.Models.Interfaces;
 
@@ -23,6 +25,15 @@ namespace HC2.Arcanastudio.Net.Models
         public string Type { get; set; }
         [JsonIgnore]
         public List<IParameter> Parameters { get; }
+
+        public void UpdateProperties(List<IPropertyStatus> propertiesstatus)
+        {
+            foreach (var propertystatus in propertiesstatus)
+            {
+                if (Properties.FirstOrDefault(d => d.Name.Equals(propertystatus.Name, StringComparison.OrdinalIgnoreCase)) is Property property)
+                    property.Value = propertystatus.Value;
+            }
+        }
 
         #endregion
 

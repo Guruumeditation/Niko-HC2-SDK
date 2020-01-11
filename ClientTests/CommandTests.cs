@@ -27,6 +27,7 @@ namespace ClientTests
             _nativeMqttClient = new Mock<INativeMqttClient>();
             _nikoResponseObservable = new NikoResponseObservable();
             _nativeMqttClient.SetupGet(d => d.ResponseObservable).Returns(_nikoResponseObservable);
+            _nativeMqttClient.SetupGet(d => d.IsConnected).Returns(true);
 
             var host = "MyHost";
             var token = "MyToken";
@@ -80,7 +81,7 @@ namespace ClientTests
             _nativeMqttClient.Setup(d => d.PublishMessage(It.IsAny<Request>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new PublishResult(PublishResultCode.Success), TimeSpan.FromSeconds(1));
 
-            var response = await _client.SendCommand(new List<DeviceCommand> { new DeviceCommand("02544b91-ea50-4241-885c-e5002abbe0ea", new Dictionary<string, string> { { "Status", "Off" } }) });
+            var response = await _client.SendCommand(new List<DeviceCommand> { new DeviceCommand("02544b91-ea50-4241-885c-e5002abbe0ea", new List<PropertyStatus>{ new PropertyStatus("Status", "Off") })});
 
             response.IsSuccess.Should().BeTrue();
             _nativeMqttClient.Verify(d => d.PublishMessage(It.Is<Request>(d => d.Payload == payload), It.IsAny<CancellationToken>()), Times.Once);
@@ -96,7 +97,7 @@ namespace ClientTests
             _nativeMqttClient.Setup(d => d.PublishMessage(It.IsAny<Request>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new PublishResult(PublishResultCode.UnspecifiedError), TimeSpan.FromSeconds(1));
 
-            var response = await _client.SendCommand(new List<DeviceCommand> { new DeviceCommand("02544b91-ea50-4241-885c-e5002abbe0ea", new Dictionary<string, string> { { "Status", "Off" } }) });
+            var response = await _client.SendCommand(new List<DeviceCommand> { new DeviceCommand("02544b91-ea50-4241-885c-e5002abbe0ea", new List<PropertyStatus>{ new PropertyStatus("Status", "Off") })});
 
 
             response.IsSuccess.Should().BeFalse();

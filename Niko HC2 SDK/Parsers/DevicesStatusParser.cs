@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.Json;
 using HC2.Arcanastudio.Net.Models;
+using HC2.Arcanastudio.Net.Models.Interfaces;
 
 namespace HC2.Arcanastudio.Net.Parsers
 {
@@ -11,7 +12,7 @@ namespace HC2.Arcanastudio.Net.Parsers
 
         public List<object> Parse(JsonElement payload)
         {
-            var devicelist = new List<DeviceProperties>();
+            var devicelist = new List<DevicePropertiesStatus>();
 
             var jsondevicelist = payload.EnumerateArray().FirstOrDefault().GetProperty("Devices");
             foreach (var device in jsondevicelist.EnumerateArray())
@@ -22,20 +23,26 @@ namespace HC2.Arcanastudio.Net.Parsers
             return devicelist.ToList<object>();
         }
 
-        private DeviceProperties ParseDevice(JsonElement element)
+        private DevicePropertiesStatus ParseDevice(JsonElement element)
         {
             var propertydefinitions = ParseProperties(element.GetProperty("Properties"));
 
-            var devicepropertydefinition = new DeviceProperties(element.GetProperty("Uuid").GetString(), propertydefinitions);
+            var devicepropertydefinition = new DevicePropertiesStatus(element.GetProperty("Uuid").GetString(), propertydefinitions);
 
             return devicepropertydefinition;
         }
 
-        private List<KeyValuePair<string,string>> ParseProperties(JsonElement parameters)
+        private List<IPropertyStatus> ParseProperties(JsonElement parameters)
         {
-            var reee = JsonSerializer.Deserialize<IEnumerable<Dictionary<string, string>>>(parameters.GetRawText());
+            var list = new List<IPropertyStatus>();
 
-            return  reee.SelectMany(d => d).ToList();
+            foreach (var element in parameters.EnumerateArray())
+            {
+                var obj = element.EnumerateObject().First();
+                list.Add(new PropertyStatus(obj.Name,obj.Value.ToString()));
+            }
+
+            return  list;
         }
 
         #endregion

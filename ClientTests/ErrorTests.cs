@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,6 +7,7 @@ using FluentAssertions;
 using HC2.Arcanastudio.Net;
 using HC2.Arcanastudio.Net.Client;
 using HC2.Arcanastudio.Net.Client.Messages;
+using HC2.Arcanastudio.Net.Client.Results;
 using HC2.Arcanastudio.Net.Models;
 using HC2.Arcanastudio.Net.Observable;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -32,6 +30,10 @@ namespace ClientTests
             _nativeMqttClient = new Mock<INativeMqttClient>();
             _nikoResponseObservable = new NikoResponseObservable();
             _nativeMqttClient.SetupGet(d => d.ResponseObservable).Returns(_nikoResponseObservable);
+            _nativeMqttClient.Setup(d => d.Connect(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new ConnectionResult(ConnectResultCode.Success), TimeSpan.FromSeconds(1));
+            _nativeMqttClient.Setup(d => d.Subscribe()).ReturnsAsync(new SubscribeResult(SubscribeResultCode.Success),
+                TimeSpan.FromSeconds(0.5));
 
             var host = "MyHost";
             var token = "MyToken";
@@ -49,7 +51,7 @@ namespace ClientTests
             var json = await File.ReadAllTextAsync(@"Data\Error.json");
             var document = JsonDocument.Parse(json);
 
-            await _client.Subscribe(new MessageObserver(m =>
+            await _client.Connect(new MessageObserver(m =>
             {
                 message = m as Message;
                 autoresetevent.Set();

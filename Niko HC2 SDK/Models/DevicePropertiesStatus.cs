@@ -3,13 +3,13 @@ using HC2.Arcanastudio.Net.Models.Interfaces;
 
 namespace HC2.Arcanastudio.Net.Models
 {
-    internal class DeviceProperties : IDeviceProperties
+    internal class DevicePropertiesStatus : IDevicePropertiesStatus
     {
         public string Id { get; }
 
-        public List<KeyValuePair<string, string>> Properties { get; }
+        public List<IPropertyStatus> Properties { get; }
 
-        public DeviceProperties(string id, List<KeyValuePair<string, string>> properties)
+        public DevicePropertiesStatus(string id, List<IPropertyStatus> properties)
         {
             Id = id;
             Properties = properties;

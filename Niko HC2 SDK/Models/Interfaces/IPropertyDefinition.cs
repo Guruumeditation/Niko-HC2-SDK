@@ -10,7 +10,7 @@ namespace HC2.Arcanastudio.Net.Models.Interfaces
         PropertyType ValueType { get; }
         IRange Range { get; }
         List<string> Choices { get; }
-        string Name { get; set; }
+        string Name { get; }
     }
 
     public enum PropertyType

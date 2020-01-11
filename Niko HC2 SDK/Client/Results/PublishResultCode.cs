@@ -10,6 +10,7 @@
         TopicNameInvalid = 144,
         PacketIdentifierInUse = 145,
         QuotaExceeded = 151,
-        PayloadFormatInvalid = 153
+        PayloadFormatInvalid = 153,
+        NotConnected = 666
     }
 }

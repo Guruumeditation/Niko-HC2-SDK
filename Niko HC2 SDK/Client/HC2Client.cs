@@ -31,12 +31,10 @@ namespace HC2.Arcanastudio.Net.Client
 
         public bool IsConnected => _mqttclient.IsConnected;
 
-        public HC2Client(string hostname, string token)
-        {
-            _token = token ?? throw new ArgumentNullException(nameof(token));
-            _hostname = hostname ?? throw new ArgumentNullException(nameof(hostname));
+        public event EventHandler Disconnected;
 
-            _mqttclient = new MqttClient();
+        public HC2Client(string hostname, string token) : this(null,hostname,token)
+        {
         }        
         
         internal HC2Client(INativeMqttClient nativemqttclient,string hostname, string token)
@@ -44,14 +42,17 @@ namespace HC2.Arcanastudio.Net.Client
             _token = token ?? throw new ArgumentNullException(nameof(token));
             _hostname = hostname ?? throw new ArgumentNullException(nameof(hostname));
 
-            _mqttclient = nativemqttclient;
+            _mqttclient = nativemqttclient ?? new MqttClient();
 
-            var observer = new NikoresponseObserver(ParseMessage);
-
-            _mqttclient.ResponseObservable.Subscribe(observer);
+            _mqttclient.Disconnected += _mqttclient_Disconnected;
         }
 
-        public Task<ConnectionResult> Connect(CancellationToken canceltoken = default)
+        private void _mqttclient_Disconnected(object sender, EventArgs e)
+        {
+            Disconnected?.Invoke(this, EventArgs.Empty);
+        }
+
+        public Task<ConnectionResult> Connect(MessageObserver observer, CancellationToken canceltoken = default)
         {
             var tcs = new TaskCompletionSource<ConnectionResult>();
 
@@ -65,8 +66,32 @@ namespace HC2.Arcanastudio.Net.Client
                             tcs.TrySetCanceled(canceltoken);
                         else
                         {
-                            _unsubscriber = _mqttclient.ResponseObservable.Subscribe(new NikoresponseObserver(ParseMessage));
-                            tcs.TrySetResult(new ConnectionResult(t.Result.ResultCode));
+                            if (t.Result.IsSuccess)
+                            {
+                                Subscribe(observer).ContinueWith(t2 =>
+                                {
+                                    if (t2.IsFaulted)
+                                        tcs.SetException(t2.Exception.InnerException);
+                                    else
+                                    {
+                                        if (t2.Result.IsSuccess)
+                                        {
+                                            _unsubscriber =
+                                                _mqttclient.ResponseObservable.Subscribe(
+                                                    new NikoresponseObserver(ParseMessage));
+                                            tcs.TrySetResult(new ConnectionResult(t.Result.ResultCode));
+                                        }
+                                        else
+                                        {
+                                            Disconnect();
+                                            tcs.TrySetResult(new ConnectionResult(ConnectResultCode.SubscriptionError,
+                                                t2.Result.ResultCode.ToString()));
+                                        }
+                                    }
+                                });
+                            }
+                            else
+                                tcs.TrySetResult(new ConnectionResult(t.Result.ResultCode));
                         }
                     }
                     catch (Exception e)
@@ -78,7 +103,7 @@ namespace HC2.Arcanastudio.Net.Client
              return tcs.Task;
         }
 
-        public Task<SubscribeResult> Subscribe(MessageObserver observer)
+        private Task<SubscribeResult> Subscribe(MessageObserver observer)
         {
             var tcs = new TaskCompletionSource<SubscribeResult>();
 
@@ -134,6 +159,11 @@ namespace HC2.Arcanastudio.Net.Client
 
         private Task<PublishResult> SendMessage(string method,object payloadobject, CancellationToken canceltoken = default)
         {
+            if (!IsConnected)
+            {
+                return Task.FromResult(new PublishResult(PublishResultCode.NotConnected, "Connect the client first."));
+            }
+
             var tcs = new TaskCompletionSource<PublishResult>(TaskCreationOptions.RunContinuationsAsynchronously);
 
             var payloadserializer = RequestSerializersFactory.GetParser(method);
@@ -201,12 +231,9 @@ namespace HC2.Arcanastudio.Net.Client
 
             _messageObservable.MessageReceived(new Message(message.Method, data));
 
-            if (Logger.IsLog)
-            {
-                Logger.WriteInfo($"{data?.Count ?? 0} item(s) received.");
-            }
-            
-            if (Logger.IsLog && data != null)
+            Logger.WriteInfo($"{data?.Count ?? 0} item(s) received.");
+
+            if (Logger.IsEnabled && data != null)
             {
                 Logger.WriteReceived(JsonSerializer.Serialize(data));
             }
@@ -228,12 +255,9 @@ namespace HC2.Arcanastudio.Net.Client
             var domains = await ZeroconfResolver.BrowseDomainsAsync();
             var responses = await ZeroconfResolver.ResolveAsync(domains.Select(g => g.Key));
 
-            if (Logger.IsLog)
+            foreach (var response in responses)
             {
-                foreach (var response in responses)
-                {
-                    Logger.WriteInfo(response.ToString());
-                }
+                Logger.WriteInfo(response.ToString());
             }
 
             return responses.Where(d => d.DisplayName.StartsWith("FP", StringComparison.OrdinalIgnoreCase))

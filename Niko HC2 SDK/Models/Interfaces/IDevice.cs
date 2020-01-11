@@ -14,5 +14,7 @@ namespace HC2.Arcanastudio.Net.Models.Interfaces
         List<ITrait> Traits { get; }
         string Type { get; }
         List<IParameter> Parameters { get; }
+
+        void UpdateProperties(List<IPropertyStatus> propertiesstatus);
     }
 }
