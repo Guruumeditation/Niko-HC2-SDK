@@ -28,6 +28,8 @@ namespace HC2.Arcanastudio.Net.Client
         Task<SubscribeResult> Subscribe();
         NikoResponseObservable ResponseObservable { get; }
         bool IsConnected { get; }
+
+        event EventHandler Disconnected;
     }
     [ExcludeFromCodeCoverage]
     internal class MqttClient : INativeMqttClient
@@ -36,6 +38,8 @@ namespace HC2.Arcanastudio.Net.Client
 
         public NikoResponseObservable ResponseObservable { get; }
         public bool IsConnected => _mqttClient.IsConnected;
+
+        public event EventHandler Disconnected;
 
         public MqttClient()
         {
@@ -119,7 +123,10 @@ namespace HC2.Arcanastudio.Net.Client
 
             });
 
-            _mqttClient.UseDisconnectedHandler(d => { });
+            _mqttClient.UseDisconnectedHandler(d =>
+            {
+                Disconnected?.Invoke(this, EventArgs.Empty);
+            });
 
 
             _mqttClient.ConnectAsync(options, canceltoken);

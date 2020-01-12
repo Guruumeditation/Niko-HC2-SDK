@@ -8,6 +8,7 @@ using FluentAssertions;
 using HC2.Arcanastudio.Net;
 using HC2.Arcanastudio.Net.Client;
 using HC2.Arcanastudio.Net.Client.Messages;
+using HC2.Arcanastudio.Net.Client.Results;
 using HC2.Arcanastudio.Net.Models;
 using HC2.Arcanastudio.Net.Models.Interfaces;
 using HC2.Arcanastudio.Net.Observable;
@@ -31,6 +32,9 @@ namespace ClientTests
             _nativeMqttClient = new Mock<INativeMqttClient>();
             _nikoResponseObservable = new NikoResponseObservable();
             _nativeMqttClient.SetupGet(d => d.ResponseObservable).Returns(_nikoResponseObservable);
+            _nativeMqttClient.Setup(d => d.Connect(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new ConnectionResult(ConnectResultCode.Success));
+            _nativeMqttClient.Setup(d => d.Subscribe()).ReturnsAsync(new SubscribeResult(SubscribeResultCode.Success));
 
             var host = "MyHost";
             var token = "MyToken";
@@ -48,7 +52,7 @@ namespace ClientTests
             var json = await File.ReadAllTextAsync(@"Data\DeviceAdded.json");
             var document = JsonDocument.Parse(json);
 
-            await _client.Subscribe(new MessageObserver(m =>
+            await _client.Connect(new MessageObserver(m =>
             {
                 message = m as Message;
                 autoresetevent.Set();
@@ -76,7 +80,7 @@ namespace ClientTests
 
             var document = JsonDocument.Parse("{}");
 
-            await _client.Subscribe(new MessageObserver(m =>
+            await _client.Connect(new MessageObserver(m =>
             {
                 message = m as Message;
                 autoresetevent.Set();
@@ -105,7 +109,7 @@ namespace ClientTests
             var json = await File.ReadAllTextAsync(@"Data\DeviceRemoved.json");
             var document = JsonDocument.Parse(json);
 
-            await _client.Subscribe(new MessageObserver(m =>
+            await _client.Connect(new MessageObserver(m =>
             {
                 message = m as Message;
                 autoresetevent.Set();
@@ -134,7 +138,7 @@ namespace ClientTests
 
             var document = JsonDocument.Parse("{}");
 
-            await _client.Subscribe(new MessageObserver(m =>
+            await _client.Connect(new MessageObserver(m =>
             {
                 message = m as Message;
                 autoresetevent.Set();
@@ -163,7 +167,7 @@ namespace ClientTests
             var json = await File.ReadAllTextAsync(@"Data\DevicesParamChanged.json");
             var document = JsonDocument.Parse(json);
 
-            await _client.Subscribe(new MessageObserver(m =>
+            await _client.Connect(new MessageObserver(m =>
             {
                 message = m as Message;
                 autoresetevent.Set();
@@ -194,7 +198,7 @@ namespace ClientTests
 
             var document = JsonDocument.Parse("{}");
 
-            await _client.Subscribe(new MessageObserver(m =>
+            await _client.Connect(new MessageObserver(m =>
             {
                 message = m as Message;
                 autoresetevent.Set();
@@ -223,7 +227,7 @@ namespace ClientTests
             var json = await File.ReadAllTextAsync(@"Data\DeviceDisplayNameChanged.json");
             var document = JsonDocument.Parse(json);
 
-            await _client.Subscribe(new MessageObserver(m =>
+            await _client.Connect(new MessageObserver(m =>
             {
                 message = m as Message;
                 autoresetevent.Set();
@@ -252,7 +256,7 @@ namespace ClientTests
 
             var document = JsonDocument.Parse("{}");
 
-            await _client.Subscribe(new MessageObserver(m =>
+            await _client.Connect(new MessageObserver(m =>
             {
                 message = m as Message;
                 autoresetevent.Set();
@@ -281,7 +285,7 @@ namespace ClientTests
             var json = await File.ReadAllTextAsync(@"Data\DeviceChanged.json");
             var document = JsonDocument.Parse(json);
 
-            await _client.Subscribe(new MessageObserver(m =>
+            await _client.Connect(new MessageObserver(m =>
             {
                 message = m as Message;
                 autoresetevent.Set();
@@ -311,7 +315,7 @@ namespace ClientTests
 
             var document = JsonDocument.Parse("{}");
 
-            await _client.Subscribe(new MessageObserver(m =>
+            await _client.Connect(new MessageObserver(m =>
             {
                 message = m as Message;
                 autoresetevent.Set();
@@ -340,7 +344,7 @@ namespace ClientTests
             var json = await File.ReadAllTextAsync(@"Data\DevicesStatus.json");
             var document = JsonDocument.Parse(json);
 
-            await _client.Subscribe(new MessageObserver(m =>
+            await _client.Connect(new MessageObserver(m =>
             {
                 message = m as Message;
                 autoresetevent.Set();
@@ -352,12 +356,14 @@ namespace ClientTests
             message.Should().NotBeNull();
             message.MessageType.Should().Be(Constants.Messages.DevicesStatus);
             message.IsError.Should().BeFalse();
-            message.Data.Should().AllBeAssignableTo<IDeviceProperties>();
+            message.Data.Should().AllBeAssignableTo<IDevicePropertiesStatus>();
             message.Data.Count.Should().Be(2);
-            var devices = message.Data.Cast<IDeviceProperties>().ToList();
+            var devices = message.Data.Cast<IDevicePropertiesStatus>().ToList();
             devices[0].Properties.Count.Should().Be(1);
             devices[1].Properties.Count.Should().Be(2);
             devices[1].Id.Should().Be("21a967a1-676d-487b-b8d4-9736ef16d450");
+            devices[1].Properties[0].Name.Should().Be("Brightness");
+            devices[1].Properties[0].Value.Should().Be("100");
         }
 
 
@@ -370,7 +376,7 @@ namespace ClientTests
 
             var document = JsonDocument.Parse("{}");
 
-            await _client.Subscribe(new MessageObserver(m =>
+            await _client.Connect(new MessageObserver(m =>
             {
                 message = m as Message;
                 autoresetevent.Set();
@@ -399,7 +405,7 @@ namespace ClientTests
             var json = await File.ReadAllTextAsync(@"Data\TimePublished.json");
             var document = JsonDocument.Parse(json);
 
-            await _client.Subscribe(new MessageObserver(m =>
+            await _client.Connect(new MessageObserver(m =>
             {
                 message = m as Message;
                 autoresetevent.Set();
@@ -427,7 +433,7 @@ namespace ClientTests
 
             var document = JsonDocument.Parse("{}");
 
-            await _client.Subscribe(new MessageObserver(m =>
+            await _client.Connect(new MessageObserver(m =>
             {
                 message = m as Message;
                 autoresetevent.Set();
@@ -456,7 +462,7 @@ namespace ClientTests
             var json = await File.ReadAllTextAsync(@"Data\SystemInfoPublished.json");
             var document = JsonDocument.Parse(json);
 
-            await _client.Subscribe(new MessageObserver(m =>
+            await _client.Connect(new MessageObserver(m =>
             {
                 message = m as Message;
                 autoresetevent.Set();
@@ -486,7 +492,7 @@ namespace ClientTests
 
             var document = JsonDocument.Parse("{}");
 
-            await _client.Subscribe(new MessageObserver(m =>
+            await _client.Connect(new MessageObserver(m =>
             {
                 message = m as Message;
                 autoresetevent.Set();

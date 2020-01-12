@@ -42,7 +42,7 @@
         ],
         "Online": "True",
         "Model": "dimmer",
-        "Traits": [],
+        "Traits": [{  "MacAddress": "002807d4" }],
         "Type": "action",
         "Parameters": [
           {

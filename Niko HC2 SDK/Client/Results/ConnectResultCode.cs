@@ -23,6 +23,7 @@
         QoSNotSupported = 155,
         UseAnotherServer = 156,
         ServerMoved = 157,
-        ConnectionRateExceeded = 159
+        ConnectionRateExceeded = 159,
+        SubscriptionError = 666
     }
 }

@@ -1,11 +1,7 @@
 ﻿namespace HC2.Arcanastudio.Net.Models.Interfaces
 {
-    public interface IProperty
+    public interface IProperty : IPropertyStatus
     {
-        string Name { get; }
-
-        string Value { get; }
-
         IPropertyDefinition Definition { get; }
     }
 }

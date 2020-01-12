@@ -7,12 +7,17 @@ namespace HC2.Arcanastudio.Net.Log
 {
     internal static class Logger
     {
-        private static LogConfiguration _logConfiguration;
+        private static LogConfiguration _logConfiguration = new NoLogConfiguration();
+
+        public static bool IsEnabled { get; set; }
+
         public static LogConfiguration Configuration
         {
             set
             {
-                _logConfiguration = value;
+                IsEnabled = value != null;
+
+                _logConfiguration = value ?? new NoLogConfiguration();
 
                 var serilogconfig = new LoggerConfiguration();
                 if (_logConfiguration.IsWriteToConsole)
@@ -23,11 +28,9 @@ namespace HC2.Arcanastudio.Net.Log
 
                 serilogconfig = serilogconfig.MinimumLevel.Debug();
 
-                Serilog.Log.Logger = serilogconfig.CreateLogger();
+                Serilog.Log.Logger = serilogconfig.Filter.ByExcluding(_ => !IsEnabled).CreateLogger();
             }
         }
-
-        public static bool IsLog => _logConfiguration != null;
 
         public static void Write(string message)
         {

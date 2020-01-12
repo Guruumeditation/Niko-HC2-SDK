@@ -19,53 +19,51 @@ Niko Home Control 2 SDK for .NET Standard 2.0
 ### Client instantiation
 
 Pass the host name and the Hobby API token (the one generated in your My Niko account) :
-```
+````csharp
  var client = new HC2Client(host, token);
 ```
 
 You can detect the host name if you don't know it :
-```
+````csharp
 var hostname = HC2Client.DiscoverHost();
 ```
 ### Start client
 
 
-To start the client, use :
+To connect to the HC2, use :
+
+````csharp
+var result = client.Connect(new MessageObserver(MessageReceived));
+
+...
+
+private void MessageReceived(IMessage message)
+{
+...
+}
 
 ```
-var result = client.Connect();
-```
+
+Response and events will be sent to the client using an observer pattern, so you must pass a messageobserver.
 
 ### Stop client
 
 
 To stop the client, use :
 
-```
+````csharp
 client.Disconnect();
-```
-
-### To subscribe to HC2 responses and events
-
-
-```
-client.Subscribe(new MessageObserver((m) => ParseMessage(m))); 
-
-private void MessageReceived(IMessage message)
-{
-...
-}
 ```
 
 ### Query HC2
 
 HC2 is using MQTT as communication. So you send a request, then HC2 will send a response message to the client.
-The response message will be an IMessage, that will be parsed in the MessageObserver you pass in the Subscribe method (examples after)
+The response message will be an IMessage, that will be parsed in the MessageObserver you passed in the Connect method (examples after)
 Requests returns a PublishResult, where you can check if the request was successful.
 
 The requests are : 
 
-```
+````csharp
 var result = await client.GetDevices();
 var result = await client.GetLocations();
 var result = await client.GetLocationItems(locationsid); // locationsid is a List<string> of locations ID which you want to get the devices in it
@@ -79,7 +77,7 @@ var result = await client.UpdateNotifications(notificationsid); // notifications
 
 To execute a command, use :
 
-```
+````csharp
 var commands = new List<DeviceCommand>{ new DeviceCommand("xxxx", new Dictionary<string,string>{ {"Brightness","50"}});
 var result = await client.SendCommand(commands);
 ```                       
@@ -92,7 +90,7 @@ You need to have the device list before (using GetDevices). Then you can check t
 Like said, responses of request and NC2 events are sent to the MessageObserver passed in the Subscribe method.
 This is the IMessage interface
 
-```
+````csharp
     public interface IMessage
     {
         string MessageType { get; }
@@ -126,7 +124,7 @@ Here is the list :
 
 Basic parser implementation : 
 
-```
+````csharp
 private void ParseMessage(IMessage message)
 {
     if (message.IsError)

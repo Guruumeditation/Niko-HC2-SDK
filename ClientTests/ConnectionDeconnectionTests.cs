@@ -35,8 +35,10 @@ namespace ClientTests
 
             _nativeMqttClient.Setup(d => d.Connect(It.IsAny<string>(), It.IsAny<string>(),It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new ConnectionResult(ConnectResultCode.Success), TimeSpan.FromSeconds(1));
+            _nativeMqttClient.Setup(d => d.Subscribe()).ReturnsAsync(new SubscribeResult(SubscribeResultCode.Success),
+                TimeSpan.FromSeconds(0.5));
 
-            var response = await client.Connect();
+            var response = await client.Connect(new MessageObserver(e => {}));
 
             response.IsSuccess.Should().BeTrue();
 
@@ -54,7 +56,7 @@ namespace ClientTests
             _nativeMqttClient.Setup(d => d.Connect(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new ConnectionResult(ConnectResultCode.NotAuthorized,"Error"), TimeSpan.FromSeconds(1));
 
-            var response = await client.Connect();
+            var response = await client.Connect(new MessageObserver(e => {}));
 
             response.IsSuccess.Should().BeFalse();
             _nativeMqttClient.Verify(d => d.Connect(host, token, It.IsAny<CancellationToken>()), Times.Once);
@@ -75,7 +77,7 @@ namespace ClientTests
             Exception ex = null;
             try
             {
-                var response = await client.Connect();
+                var response = await client.Connect(new MessageObserver(e => {}));
             }
             catch (Exception e)
             {
@@ -90,15 +92,23 @@ namespace ClientTests
         [TestMethod]
         public async Task Disconnect_Success()
         {
+            var eventraised = false;
             var host = "MyHost";
             var token = "MyToken";
+            var autoresetevent = new AutoResetEvent(false);
+            _nativeMqttClient.Setup(d => d.Disconnect()).Returns(Task.CompletedTask).Raises(d => d.Disconnected+= null,EventArgs.Empty);
 
             var client = new HC2Client(_nativeMqttClient.Object, host, token);
-
-            _nativeMqttClient.Setup(d => d.Disconnect()).Returns(Task.CompletedTask);
+            client.Disconnected += (sender, args) =>
+            {
+                eventraised = true;
+                autoresetevent.Set();
+            };
 
             await client.Disconnect();
 
+             autoresetevent.WaitOne(TimeSpan.FromSeconds(2)).Should().BeTrue();
+             eventraised.Should().Be(true);
             _nativeMqttClient.Verify(d => d.Disconnect(), Times.Once);
         }
     }

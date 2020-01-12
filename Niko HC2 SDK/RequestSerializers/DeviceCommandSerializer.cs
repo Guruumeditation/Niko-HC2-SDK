@@ -38,7 +38,7 @@ namespace HC2.Arcanastudio.Net.RequestSerializers
                             foreach (var command in devicecommand.Commands)
                             {
                                 writer.WriteStartObject();
-                                writer.WriteString(command.Key, command.Value);
+                                writer.WriteString(command.Name, command.Value);
                                 writer.WriteEndObject();
                             }
 

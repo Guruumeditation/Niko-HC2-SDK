@@ -8,7 +8,7 @@
     <Company>Arcana Studio.NET</Company>
     <Product>Niko Home Controller 2 SDK</Product>
     <Copyright>Copyright Arcana Studio</Copyright>
-    <Version>0.5.0</Version>
+    <Version>1.0.0</Version>
     <PackageId>Net.ArcanaStudio.NikoHC2SDK</PackageId>
     <PackageLicenseFile></PackageLicenseFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
