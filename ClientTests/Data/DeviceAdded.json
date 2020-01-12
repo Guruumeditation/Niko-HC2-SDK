@@ -1,0 +1,50 @@
+[
+  {
+    "Devices": [
+      {
+        "Name": "Single dimming control with LEDs",
+        "Technology": "nikohomecontrol",
+        "Uuid": "b6a06a67-ce6f-42e2-933b-c67227996f46",
+        "Identifier": "071da53c-03ed-46b7-9036-082d8c1f47e2",
+        "Model": "dimcontrollerfeedback",
+        "Traits": [
+          {
+            "MacAddress": "002807d4"
+          }
+        ],
+        "Type": "panel",
+        "Parameters": [
+          {
+            "LocationId": "7f62f934-83d3-4c66-b4bd-df7065cb1c6a"
+          },
+          {
+            "LocationName": "Demo"
+          },
+          {
+            "LocationIcon": "general"
+          }
+        ]
+      },
+      {
+        "Name": "All-off",
+        "Technology": "nikohomecontrol",
+        "Uuid": "76924964-ae78-49ed-a011-f2939d0c6ff4",
+        "Identifier": "fc7993cd-2711-41c1-aebc-4fcac32b8fa3",
+        "Model": "alloff",
+        "Traits": [],
+        "Type": "action",
+        "Parameters": [
+          {
+            "LocationId": "7f62f934-83d3-4c66-b4bd-df7065cb1c6a"
+          },
+          {
+            "LocationName": "Demo"
+          },
+          {
+            "LocationIcon": "general"
+          }
+        ]
+      }
+    ]
+  }
+]

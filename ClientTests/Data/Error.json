@@ -1,0 +1,5 @@
+{
+  "ErrMessage": "Method 'unknown' not supported for topic 'hobby/control/location/cmd'",
+  "ErrCode": "UNKNOWN_METHOD",
+  "Method": "unknown"
+}

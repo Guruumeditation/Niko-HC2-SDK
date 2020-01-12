@@ -1,0 +1,18 @@
+[
+  {
+    "Locations": [
+      {
+        "Icon": "general",
+        "Name": "Home",
+        "Index": "1",
+        "Uuid": "b4e948b8-6378-498f-961c-b7c285c9f5b8"
+      },
+      {
+        "Icon": "general",
+        "Name": "Demo",
+        "Index": "2",
+        "Uuid": "7f62f934-83d3-4c66-b4bd-df7065cb1c6a"
+      }
+    ]
+  }
+]

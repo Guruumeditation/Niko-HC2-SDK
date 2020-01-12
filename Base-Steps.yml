@@ -1,0 +1,57 @@
+parameters:
+  Publish: 'false'
+
+steps:
+
+  - task: SonarCloudPrepare@1
+    displayName: 'Prepare analysis on SonarCloud'
+    inputs:
+      SonarCloud: 'SonarCloud-NikoHC2SDK'
+      organization: 'guruumeditation-github'
+      scannerMode: 'MSBuild'
+      projectKey: 'Guruumeditation_Niko-HC2-SDK'
+      projectName: 'Niko-HC2-SDK'
+     
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build solution'
+    inputs:
+     command: 'build'
+     projects: '**/*Tests.csproj'
+     arguments: '--configuration $(buildConfiguration)'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Run tests'
+    inputs:
+     command: 'test'
+     projects: '**/*Tests.csproj'
+     testRunTitle: 'HC2 SDK Test'
+     arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+
+  - task: SonarCloudAnalyze@1
+    displayName: 'Run Code Analysis'
+    
+  - task: SonarCloudPublish@1
+    displayName: 'Publish Code Analysis'
+    inputs:
+     pollingTimeoutSec: '300'
+
+  # Pack NuGet packages.
+  - task: DotNetCoreCLI@2
+    displayName: 'Nuget Pack'
+    inputs:
+      command: 'pack'
+      configuration: 'release'
+      versioningScheme: byEnvVar
+      versionEnvVar:   ${{ parameters.NugetVersion }}
+      packagesToPack: '**/Niko HC2 SDK.csproj' 
+      verbosityPack: Normal
+      packDirectory: '$(Build.ArtifactStagingDirectory)/packages'
+  
+  - ${{ if eq(parameters.Publish, 'true')}}:
+    - task: DotNetCoreCLI@2
+      displayName: dotnet nuget push
+      inputs:
+        command: custom
+        custom: nuget
+        arguments: push $(Build.ArtifactStagingDirectory)\packages\*.nupkg  --source https://api.nuget.org/v3/index.json --api-key $(Nuget-NikoHC2SDK-Key) --no-symbols true

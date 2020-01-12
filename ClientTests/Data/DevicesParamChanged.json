@@ -1,0 +1,54 @@
+[
+  {
+    "Devices": [
+      {
+        "Parameters": [
+          {
+            "LocationId": "7f62f934-83d3-4c66-b4bd-df7065cb1c6a"
+          },
+          {
+            "LocationName": "Demo"
+          },
+          {
+            "LocationIcon": "general"
+          }
+        ],
+        "Uuid": "ab2e315e-a6df-4cc8-9518-5fa2a48226f5"
+      },
+      {
+        "Parameters": [
+          {
+            "LongPressTime01": "1000"
+          },
+          {
+            "LocationId": "7f62f934-83d3-4c66-b4bd-df7065cb1c6a"
+          },
+          {
+            "LocationName": "Demo"
+          },
+          {
+            "ButtonMode01": "ShortPress"
+          },
+          {
+            "LocationIcon": "general"
+          }
+        ],
+        "Uuid": "ae56f142-03ca-4de6-8547-282489a615ca"
+      },
+      {
+        "Parameters": [
+          {
+            "LocationId": "7f62f934-83d3-4c66-b4bd-df7065cb1c6a"
+          },
+          {
+            "LocationName": "Demo"
+          },
+          {
+            "LocationIcon": "general"
+          }
+        ],
+        "Uuid": "d06d3d73-6820-4309-be16-1e201d4aa8b8"
+      }
+    ]
+  }
+]

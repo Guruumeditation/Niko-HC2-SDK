@@ -1,0 +1,22 @@
+# Pipeline for Develop CI
+
+name: $(Date:yyyyMMdd)$(Rev:r)
+
+trigger:
+  branches:
+    include:
+    - developement
+  paths:
+    exclude:
+    - README.md
+pr: none
+
+pool:
+  vmImage: $(VMImage)
+
+steps:
+- template: Base-Steps.yml
+  parameters:
+    Version: $(Version-Develop)
+    NugetVersion : NugetVersion-Develop
+    Publish: 'true'

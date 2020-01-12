@@ -1,0 +1,13 @@
+[
+  {
+    "Notifications": [
+      {
+        "Status": "read",
+        "Type": "alarm",
+        "TimeOccurred": "20190315140930",
+        "Uuid": "a5f576c6-7f4a-4541-bc39-28f617cff435",
+        "Text": "Dimmer ON"
+      }
+    ]
+  }
+]

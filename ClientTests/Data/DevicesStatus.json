@@ -1,0 +1,25 @@
+[
+  {
+    "Devices": [
+      {
+        "Properties": [
+          {
+            "BasicState": "Off"
+          }
+        ],
+        "Uuid": "76924964-ae78-49ed-a011-f2939d0c6ff4"
+      },
+      {
+        "Properties": [
+          {
+            "Brightness": "100"
+          },
+          {
+            "Status": "On"
+          }
+        ],
+        "Uuid": "21a967a1-676d-487b-b8d4-9736ef16d450"
+      }
+    ]
+  }
+]
