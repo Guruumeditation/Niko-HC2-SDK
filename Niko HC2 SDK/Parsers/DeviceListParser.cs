@@ -27,16 +27,18 @@ namespace HC2.Arcanastudio.Net.Parsers
         {
             var device = JsonSerializer.Deserialize<Device>(element.GetRawText());
 
-            var propertydefinitions = ParsePropertyDefinitions(element.GetProperty("PropertyDefinitions"));
-
-            var properties = ParseProperty(element.GetProperty("Properties"));
-
-            foreach (var property in properties)
+            if (element.TryGetProperty("PropertyDefinitions", out var propDefinitions))
             {
-                property.Definition = propertydefinitions[property.Name];
-            }
+                var propertyDefinitions = ParsePropertyDefinitions(propDefinitions);
+                var properties = ParseProperty(element.GetProperty("Properties"));
 
-            device.Properties.AddRange(properties);
+                foreach (var property in properties)
+                {
+                    property.Definition = propertyDefinitions[property.Name];
+                }
+
+                device.Properties.AddRange(properties);
+            }
 
             device.Parameters.AddRange(ParseParameter(element.GetProperty("Parameters")));
 
